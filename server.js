@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const passport = require("passport");
 const usersRouter = require("./routes/api/users");
 const config = require('config');
+const cors = require('cors');
+
 require('dotenv').config()
 const app = express();
 // Body parser middleware
@@ -12,6 +14,9 @@ app.use(
     })
 );
 app.use(express.json());
+app.use(cors({
+    origin: '*'
+}));
 // DB Config
 const db = process.env.MONGO_URI
 // Connect to MongoDB
@@ -30,7 +35,7 @@ app.use(passport.initialize());
 require("./config/passport")(passport);
 // Routes
 app.use("/api/users", usersRouter);
-// 
+//
 // //Serve static assets if in production
 // if (process.env.NODE_ENV = "production") {
 //     app.use(express.static('client/build'));
