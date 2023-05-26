@@ -1,6 +1,5 @@
 import React,{ useCallback, useEffect, useMemo, useState } from 'react';
 import Phaser from 'phaser';
-import GridEngine from 'grid-engine';
 import TestScene from './TestScene';
 
 
@@ -45,3 +44,6 @@ export default function GameComponent() {
       </>
   );
 }
+
+
+//add infront of build and start in package.json SET NODE_OPTIONS=--openssl-legacy-provider &&
