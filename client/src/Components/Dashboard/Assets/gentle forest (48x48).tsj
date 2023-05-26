@@ -1,0 +1,14 @@
+{ "columns":16,
+ "image":"19.07a Gentle Forest 3.0 ($5 palettes)\/48x48 resize\/gentle forest (48x48 resize) v05.png",
+ "imageheight":768,
+ "imagewidth":768,
+ "margin":0,
+ "name":"gentle forest (48x48)",
+ "spacing":0,
+ "tilecount":256,
+ "tiledversion":"1.10.1",
+ "tileheight":48,
+ "tilewidth":48,
+ "type":"tileset",
+ "version":"1.10"
+}

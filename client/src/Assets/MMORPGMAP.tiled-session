@@ -1,0 +1,78 @@
+{
+    "activeFile": "C:/Users/Julia/OneDrive/Documents/MMORPG/Server/client/src/Components/Dashboard/Assets/map.tmj",
+    "expandedProjectPaths": [
+    ],
+    "fileStates": {
+        "": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Julia/OneDrive/Documents/MMORPG/Server/client/src/Components/Dashboard/Assets/map.tmj": {
+            "scale": 0.5,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 999,
+                "y": 693
+            }
+        },
+        "C:/Users/Julia/OneDrive/Documents/MMORPG/Server/client/src/Components/Dashboard/Assets/map.tmj#gentle forest": {
+            "scaleInEditor": 1
+        },
+        "C:/Users/Julia/OneDrive/Documents/MMORPG/Server/client/src/Components/Dashboard/Assets/map.tmj#gentle forest (48x48)": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "gentle forest (48x48).tsj": {
+            "scaleInDock": 0.33,
+            "scaleInEditor": 1
+        },
+        "gentle forest (larger 6.tsj": {
+            "scaleInDock": 0.75,
+            "scaleInEditor": 1
+        },
+        "gentle forest larger 2.tsj": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "gentle forest larger 3.tsj": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "gentle forest larger 5.tsj": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "gentle forest larger.tsj": {
+            "scaleInDock": 0.5,
+            "scaleInEditor": 1
+        },
+        "gentle forest.tsj": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        }
+    },
+    "last.exportedFilePath": "C:/Users/Julia/OneDrive/Documents/MMORPG/Server/client/src/Components/Dashboard/Assets",
+    "last.externalTilesetPath": "C:/Users/Julia/OneDrive/Documents/MMORPG/Server/client/src/Components/Dashboard/Assets/19.07a Gentle Forest 3.0 ($5 palettes)/48x48 resize",
+    "last.imagePath": "C:/Users/Julia/OneDrive/Documents/MMORPG/Server/client/src/Components/Dashboard/Assets/19.07a Gentle Forest 3.0 ($5 palettes)/48x48 resize",
+    "lastUsedTilesetExportFilter": "JSON tileset files (*.tsj *.json)",
+    "map.lastUsedExportFilter": "All Files (*)",
+    "openFiles": [
+        "C:/Users/Julia/OneDrive/Documents/MMORPG/Server/client/src/Components/Dashboard/Assets/map.tmj"
+    ],
+    "project": "MMORPGMAP.tiled-project",
+    "recentFiles": [
+        "C:/Users/Julia/OneDrive/Documents/MMORPG/Server/client/src/Components/Dashboard/Assets/map.tmj",
+        "gentle forest (48x48).tsj",
+        "gentle forest (larger 6.tsj",
+        "gentle forest larger 5.tsj",
+        "gentle forest larger 3.tsj",
+        "gentle forest larger 2.tsj",
+        "gentle forest larger.tsj",
+        "gentle forest.tsj"
+    ],
+    "tileset.embedInMap": true,
+    "tileset.lastUsedFilter": "All Files (*)",
+    "tileset.tileSize": {
+        "height": 48,
+        "width": 48
+    }
+}

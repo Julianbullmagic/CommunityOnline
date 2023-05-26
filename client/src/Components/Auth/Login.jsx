@@ -67,7 +67,6 @@ class Login extends Component {
                       <label htmlFor="Email">Email</label> <br />
                       <input
                         type="email"
-                        className="input-control"
                         placeholder="Enter your email"
                         id="email"
                         value={email}
@@ -89,7 +88,6 @@ class Login extends Component {
                       <label htmlFor="Password">Password</label> <br />
                       <input
                         type="password"
-                        className="input-control"
                         placeholder="Enter your password"
                         id="password"
                         value={password}

@@ -69,7 +69,6 @@ Router.post('/login', (req, res) => {
     if (!isValid) {
         return res.status(400).json(errors);
     }
-
     const email = req.body.email;
     const password = req.body.password;
 
@@ -101,7 +100,8 @@ Router.post('/login', (req, res) => {
                     }, (err, token) => {
                         res.json({
                             success: true,
-                            token: "Bearer" + token
+                            token: "Bearer" + token,
+                            name:user.name
                         });
                     });
                 } else {

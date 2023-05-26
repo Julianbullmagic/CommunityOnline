@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import GameComponent from './game';
 import { connect } from 'react-redux';
 import { logoutUser } from '../../redux/actions/authActions';
 import './Dashboard.css';
@@ -24,6 +25,7 @@ class Dashboard extends Component {
                 <h3>
                   You are Successfully logged into a Full-stack MERN Application
                 </h3>
+                <GameComponent/>
                 <button
                   onClick={this.onLogoutClick}
                   className="btn btn-lg btn-warning mt-5"
