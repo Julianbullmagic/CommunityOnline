@@ -5,11 +5,15 @@ const usersRouter = require("./routes/api/users");
 const config = require('config');
 const cors = require('cors');
 const { Server } = require("socket.io");
-const http = require('http');
 require('dotenv').config()
 const app = express();
-const server = http.createServer(app);
-const io = new Server(server);
+const http = require('http').Server(app);
+const io = require('socket.io')(http,{
+  cors: {
+    origin: ['https://onlinecommunity.onrender.com' , 'http://localhost:3000'],
+    methods: ["GET", "POST"]
+  }
+});
 // Body parser middleware
 app.use(
     express.urlencoded({
@@ -51,7 +55,6 @@ setInterval(sendState, 500)
 
 
 function sendState(){
-  console.log("returning state",players)
   io.emit('updateState',JSON.stringify(players))
 }
 
@@ -66,7 +69,25 @@ io.on('connection', (socket) => {
   socket.on('player joining', (data) => {
     let parseddata=JSON.parse(data)
     playerid=parseddata.name
-    players.push({id:parseddata.name,x:0,y:0,angle:0})
+    let nametaken=false
+    for (let player of players){
+      if (player.id==playerid){
+      nametaken=true
+    }
+  }
+    if(!nametaken){
+      players.push({id:parseddata.name,x:parseddata.name.x,y:parseddata.y})
+    }
+  });
+  socket.on('logout', (name) => {
+    console.log(`${name} logging out`);
+    let newplayers=[]
+    for (let player of players){
+      if (player.id!==name){
+      newplayers.push(player)
+    }
+  }
+    players=newplayers
   });
 socket.on('disconnect', () => {
   console.log('user disconnected');
@@ -78,14 +99,14 @@ socket.on('returning state', (data) => {
   let parseddata=JSON.parse(data)
   for (let player of players){
     if(parseddata.id==player.id){
-      player.x=parseddata.offsetx
-      player.y=parseddata.offsety
-      player.angle=parseddata.angle
+      player.x=parseddata.x
+      player.y=parseddata.y
     }
   }
+  io.emit("updateState",JSON.stringify(players))
 });
 });
 
 
 const port = process.env.PORT || 5000;
-app.listen(port, () => console.log(`Server up and running on port ${port} !`));
+http.listen(port, () => console.log(`Listening on port ${port}`));

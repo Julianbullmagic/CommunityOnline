@@ -2,9 +2,21 @@ import axios from 'axios';
 import setAuthToken from '../../utils/setAuthToken';
 import jwt_decode from 'jwt-decode';
 import { GET_ERRORS, SET_CURRENT_USER, USER_LOADING } from './types'; // Register User
+import { io } from 'socket.io-client';
+
+// "undefined" means the URL will be computed from the `window.location` object
+
+const BASEURL = process.env.NODE_ENV === 'production' ?'https://onlinecommunity.onrender.com' : 'http://localhost:5000';
+const socket = io(BASEURL);
+console.log(BASEURL,"connection url")
+
+socket.on("connect_error", (err) => {
+  console.log(`connect_error due to ${err.message}`);
+});
+
 export const registerUser = (userData, history) => dispatch => {
   axios
-    .post('https://online-community.onrender.com/api/users/register', userData)
+    .post(BASEURL+'/api/users/register', userData)
     .then(res => history.push('/login')) // re-direct to login on successful register
     .catch(err =>
       dispatch({
@@ -15,12 +27,13 @@ export const registerUser = (userData, history) => dispatch => {
 }; // Login - get user token
 export const loginUser = userData => dispatch => {
   axios
-    .post('https://online-community.onrender.com/api/users/login', userData)
+    .post(BASEURL+'/api/users/login', userData)
     .then(res => {
       // Save to localStorage// Set token to localStorage
-      const { token } = res.data;
+      const { token,name } = res.data;
+      console.log(res.data.name,"token")
       localStorage.setItem('jwtToken', token);
-      localStorage.setItem('name', token.name);
+      localStorage.setItem('name', name);
 
       // Set token to Auth header
       setAuthToken(token);
@@ -49,7 +62,12 @@ export const setUserLoading = () => {
 }; // Log user out
 export const logoutUser = () => dispatch => {
   // Remove token from local storage
+  let name=localStorage.getItem('name');
+
+  socket.emit("logout",name)
   localStorage.removeItem('jwtToken');
+  localStorage.removeItem('name');
+
   // Remove auth header for future requests
   setAuthToken(false);
   // Set current user to empty object {} which will set isAuthenticated to false

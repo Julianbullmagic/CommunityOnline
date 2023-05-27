@@ -27,7 +27,8 @@ export default function GameComponent() {
         default: 'arcade',
         arcade: {
             debug: true,
-            gravity: { y: 0 }
+            gravity: { y: 0 },
+            
         }
           },
       backgroundColor: '#000000',

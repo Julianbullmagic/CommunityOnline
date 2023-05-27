@@ -98,6 +98,7 @@ Router.post('/login', (req, res) => {
                     jwt.sign(payload, config.get('secretOrKey'), {
                         expiresIn: 63113852 //2 years in seconds    ‬
                     }, (err, token) => {
+                      console.log(user,"user")
                         res.json({
                             success: true,
                             token: "Bearer" + token,

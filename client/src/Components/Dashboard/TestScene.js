@@ -6,17 +6,35 @@ import hero from './Assets/character.png'
 import { io } from 'socket.io-client';
 
 // "undefined" means the URL will be computed from the `window.location` object
-const URL = process.env.NODE_ENV === 'production' ?'https://onlinecommunity.onrender.com/' : 'http://localhost:3000';
-
+const URL = process.env.NODE_ENV === 'production' ?'https://onlinecommunity.onrender.com' : 'http://localhost:5000';
+console.log(URL,"connection url")
 const socket = io(URL);
 
+
+socket.on("connect_error", (err) => {
+  console.log(`connect_error due to ${err.message}`);
+});
+console.log(process.env.NODE_ENV,URL)
 console.log(json)
+
+
 export default class TestScene extends Scene {
+
     constructor() {
         super('TestScene');
+        this.playernames=[]
     }
-    player
-    map
+
+
+    sendstate(x,y,id){
+      let playerdata = {
+          "x": Math.round(x),
+          "y": Math.round(y),
+          "id":id
+              }
+      socket.emit('returning state', JSON.stringify(playerdata))
+    }
+
     preload() {
         this.load.image('map image',mapimage)
         this.load.tilemapTiledJSON('map data',json)
@@ -33,69 +51,57 @@ export default class TestScene extends Scene {
    tileWidth: 48,
    tileHeight: 48,
    });
-    console.log(this.map,"map")
     let tileset=this.map.addTilesetImage('gentle forest (48x48 resize) v05','map image')
-    console.log(tileset,"tileset")
     this.baselayer=this.map.createLayer("Tile Layer 1", tileset,0,0).setScale(0.5);
     this.clifflayer=this.map.createLayer("cliffs", tileset,0,0).setScale(0.5);
     this.clifflayer.setCollisionByExclusion(-1)
     // this.clifflayer.renderDebug(this.add.graphics());
-
     // map.createFromObjects("Trees", {gid:208,key:'tree'});
     this.player=this.physics.add.sprite(0,0,'hero')
-    console.log(this.clifflayer,this.player)
-
-    // this.player.setCollideWorldBounds(true)
-    this.physics.add.collider(this.player, this.clifflayer, () => {
-            console.log('colliding');
-        });
+    this.physics.add.collider(this.player, this.clifflayer);
+    this.physics.world.setFPS(30)
     this.cameras.main.startFollow(this.player,true,1,1)
     this.cameras.main.setFollowOffset(0,-this.player.height)
-
-    socket.emit('player joining', json.stringify({"name":"Jim"}))
-    function sendstate(){
-      let playerdata = {
-          "offsetx": this.player.x,
-          "offsety": this.player.y,
-          "id":this.player.id
-              }
-      socket.emit('returning state', json.stringify(playerdata))
-    }
-
-    setInterval(sendstate, 250)
+    let name=localStorage.getItem("name")
+    socket.emit('player joining', JSON.stringify({"name":name,"x":this.player.x,"y":this.player.y}))
+    this.player.id=name
 
     socket.on('updateState',(data)=>{
-      // let tempplayers=json.parse(data)
-      // for (let player of tempplayers){
-      //   if (player['id']==app.player.id){
-      //     continue
-      //   }
-      //   if (player['id'] not in app.playernames){
-      //     this.playernames.append(player['id'])
-      //     let pos = [player['x'],player['y']]
-      //     newplayer=AnotherPlayerEntity(app, name='kitty', pos=pos, player['id'])
-      //     this.players.append(newplayer)
-      //   }
-      //   for (let play in this.players){
-      //     if (play.playername==player['id']){
-      //         play.lastpos=play.pos
-      //         play.currentpos=vec2(int(player['x']),int(player['y']))
-      //         play.pos=vec2(int(player['x']),int(player['y']))
-      //         play.incrementx=play.currentpos[0]-play.lastpos[0]
-      //         play.incrementx=int(play.incrementx/15)
-      //         play.incrementy=play.currentpos[1]-play.lastpos[1]
-      //         play.incrementy=int(play.incrementy/15)
-      //         play.positiontimer=0
-      //         play.angle=player['angle']
-      //     }
-      //   }
-      // }
+      console.log("updating global state",data)
+      let tempplayers=json.parse(data)
+      for (let player of tempplayers){
+        if (player['id']==this.player.id){
+          continue
+        }
+        if (player['id'] not in this.playernames){
+          this.playernames.append(player['id'])
+          let pos = [player['x'],player['y']]
+          newplayer=AnotherPlayerEntity(app, name='kitty', pos=pos, player['id'])
+          this.players.append(newplayer)
+        }
+        for (let play in this.players){
+          if (play.playername==player['id']){
+              play.lastpos=play.pos
+              play.currentpos=vec2(int(player['x']),int(player['y']))
+              play.pos=vec2(int(player['x']),int(player['y']))
+              play.incrementx=play.currentpos[0]-play.lastpos[0]
+              play.incrementx=int(play.incrementx/15)
+              play.incrementy=play.currentpos[1]-play.lastpos[1]
+              play.incrementy=int(play.incrementy/15)
+              play.positiontimer=0
+              play.angle=player['angle']
+          }
+        }
+      }
     })
   }
   update(){
+    let x=this.player.x
+    let y=this.player.y
+    let id=this.player.id
+    this.sendstate(x,y,id)
     const cursors=this.input.keyboard.createCursorKeys()
     this.player.setVelocity(0);
-
     if(cursors.left.isDown){
       this.player.setVelocityX(-200);
     }else if(cursors.right.isDown){
