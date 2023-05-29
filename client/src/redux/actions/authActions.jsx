@@ -14,6 +14,16 @@ socket.on("connect_error", (err) => {
   console.log(`connect_error due to ${err.message}`);
 });
 
+socket.on("playing logging out because inactive", (err) => {
+  console.log("playing logging out because inactive");
+  let name=localStorage.getItem('name');
+  socket.emit("logout",name)
+  localStorage.removeItem('jwtToken');
+  localStorage.removeItem('name');
+  window.location.replace("/");
+});
+
+
 export const registerUser = (userData, history) => dispatch => {
   axios
     .post(BASEURL+'/api/users/register', userData)
@@ -63,13 +73,9 @@ export const setUserLoading = () => {
 export const logoutUser = () => dispatch => {
   // Remove token from local storage
   let name=localStorage.getItem('name');
-
   socket.emit("logout",name)
   localStorage.removeItem('jwtToken');
   localStorage.removeItem('name');
-
-  // Remove auth header for future requests
   setAuthToken(false);
-  // Set current user to empty object {} which will set isAuthenticated to false
   dispatch(setCurrentUser({}));
 };

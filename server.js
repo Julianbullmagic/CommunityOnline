@@ -52,7 +52,34 @@ app.use("/api/users", usersRouter);
 //     });
 // }
 setInterval(sendState, 500)
+setInterval(checkMovement, 2000)
+function checkMovement(){
+  for (let player of players){
+        if (!player.moving){
+          player.nomovement=player.nomovement+1
+        }
+        if(player.moving){
+          player.nomovement=0
+        }
+        if (player.nomovement>150){
+          logout(player.id)
+        }
+    console.log(player)
+  }
+  console.log(players)
+}
 
+
+function logout(name){
+  let newplayers=[]
+  for (let player of players){
+    if (player.id!==name){
+    newplayers.push(player)
+  }
+}
+  players=newplayers
+  io.emit("playing logging out because inactive",JSON.stringify(name))
+}
 
 function sendState(){
   io.emit('updateState',JSON.stringify(players))
@@ -62,6 +89,7 @@ let players=[]
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
+
 
 io.on('connection', (socket) => {
   console.log('a user connected');
@@ -76,31 +104,28 @@ io.on('connection', (socket) => {
     }
   }
     if(!nametaken){
-      players.push({id:parseddata.name,x:parseddata.name.x,y:parseddata.y})
+      players.push({id:parseddata.name,x:parseddata.name.x,y:parseddata.y,nomovement:0,moving:false})
     }
   });
-  socket.on('logout', (name) => {
-    console.log(`${name} logging out`);
-    let newplayers=[]
-    for (let player of players){
-      if (player.id!==name){
-      newplayers.push(player)
-    }
-  }
-    players=newplayers
+  socket.on('logout', (playername) => {
+    console.log(`${playername} logging out`);
+      logout(playername)
   });
+
 socket.on('disconnect', () => {
   console.log('user disconnected');
 });
 socket.on("connect_error", (err) => {
   console.log(`connect_error due to ${err.message}`);
 });
+
 socket.on('returning state', (data) => {
   let parseddata=JSON.parse(data)
   for (let player of players){
     if(parseddata.id==player.id){
       player.x=parseddata.x
       player.y=parseddata.y
+      player.moving=parseddata.moving
     }
   }
   io.emit("updateState",JSON.stringify(players))
